@@ -1,0 +1,72 @@
+/* Copyright 2025 Esri
+ *
+ * Licensed under the Apache License Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import 'https://js.arcgis.com/4.32/@arcgis/core/assets/esri/themes/dark/main.css';
+
+.calcite-mode-dark,
+:root {
+  --calcite-color-brand: #eb3492;
+  --calcite-color-brand-hover: #9e2161;
+  --border-radius: 10px;
+  --box-shadow: 2px 4px 4px hsla(0, 0%, 2%, 0.2), 4px 8px 8px hsla(0, 0%, 2%, 0.2), 8px 16px 16px hsla(0, 0%, 2%, 0.2);
+  --margin: 15px;
+  --calcite-color-background: rgba(50 50 50 / 60%);
+}
+
+html,
+body,
+#root {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-family: var(--calcite-sans-family);
+  color: var(--calcite-color-text-1);
+  background: var(--calcite-color-background);
+}
+
+a {
+  color: var(--calcite-ui-text-2);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--calcite-ui-text-1);
+}
+
+/* remove outline from map */
+/* .esri-view .esri-view-surface--inset-outline:focus::after {
+  outline: none !important;
+} */
+
+/* scrollbar styles */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: var(--border-radius);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
