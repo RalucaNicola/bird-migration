@@ -19,7 +19,6 @@ class PointData {
                 const coords: number[][] = [];
                 const timeDates: Date[] = [];
                 const dataWithoutHeader = results.data.slice(1) as string[];
-                console.log(dataWithoutHeader);
                 dataWithoutHeader.forEach(d => {
                     if (parseFloat(d[3]) && parseFloat(d[4])) {
                         const [x, y] = lngLatToXY(parseFloat(d[3]), parseFloat(d[4]));
@@ -28,8 +27,8 @@ class PointData {
                     }
                 });
                 runInAction(() => {
-                    this.coordinates = coords;
-                    this.timeDates = timeDates;
+                    this.coordinates = coords.slice(30000);
+                    this.timeDates = timeDates.slice(30000);
                     this.dataLoaded = true;
                 })
             }

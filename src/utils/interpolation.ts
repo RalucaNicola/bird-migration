@@ -1,7 +1,7 @@
 import Camera from "@arcgis/core/Camera";
 import { Point } from "@arcgis/core/geometry";
 
-type LerpObject = Point | Camera ;
+type LerpObject = Point | Camera;
 type LerpValue = number | number[] | Date | LerpObject;
 
 const delta = (a: number, b: number, modulo?: number): number => {
@@ -67,7 +67,7 @@ const objectLerp = <T extends LerpObject>(
                 z: numberLerp(pointA.z, pointB.z, t, total, modulo)
             }) as T;
         }
-    } 
+    }
     if (Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((v, i) => typeof v === "number" && typeof b[i] === "number")) {
         return a.map((v, i) => numberLerp(v, b[i], t, total, modulo)) as T;
     }
@@ -98,3 +98,15 @@ export const interpolate = <T extends LerpValue>(
         "Values a and b do not have compatible types for interpolation"
     );
 };
+
+
+export const getHeading = ([x1, y1]: number[], [x2, y2]: number[]) => {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const atan2 = Math.atan2(dy, dx);
+    return 180 - radToDeg(atan2);
+}
+
+const radToDeg = (angle: number) => {
+    return 180 * angle / Math.PI;
+}
