@@ -12,8 +12,10 @@ import SunLighting from '@arcgis/core/views/3d/environment/SunLighting';
 import { formatDate, formatTime } from '../../utils';
 import '@esri/calcite-components/dist/components/calcite-icon';
 import '@esri/calcite-components/dist/components/calcite-fab';
+import '@esri/calcite-components/dist/components/calcite-label';
+import '@esri/calcite-components/dist/components/calcite-switch';
 
-const timeStep = 1000 * 10; // 10 seconds 
+const timeStep = 100; // milliseconds
 
 export const Timeline = observer(() => {
     const { dataLoaded, timeDates, coordinates } = pointData;
@@ -23,11 +25,12 @@ export const Timeline = observer(() => {
     const timesliderRef = useRef(null);
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
     const isAnimatingRef = useRef<boolean>(false);
+    const isFollowingRef = useRef<boolean>(false);
     const mapAnimationRef = useRef(null);
     const viewRef = useRef<__esri.SceneView>(null);
 
     const updateVisualization = (time: Date) => {
-        mapAnimationRef.current.update(time);
+        mapAnimationRef.current.update(time, isFollowingRef.current);
         (viewRef.current.environment.lighting as SunLighting).date = time;
         setCurrentTime(time);
         if (isAnimatingRef.current) {
@@ -100,6 +103,12 @@ export const Timeline = observer(() => {
                 <div className={styles.date}>{formatDate(currentTime.getTime())}</div>
                 <div className={styles.hours}>{formatTime(currentTime)}</div>
             </div>
+            <div className={styles.followMode}><calcite-label layout="inline">Follow bird
+                <calcite-switch oncalciteSwitchChange={(evt) => {
+                    const value = evt.target.checked;
+                    isFollowingRef.current = value;
+                }}></calcite-switch>
+                </calcite-label></div>
         </div>}
         <div className={styles.container} ref={timelineRef}></div>
     </div>);

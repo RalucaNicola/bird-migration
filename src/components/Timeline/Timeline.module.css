@@ -40,3 +40,7 @@
   width: 100%;
   pointer-events: all;
 }
+
+.followMode {
+  pointer-events: all;
+}

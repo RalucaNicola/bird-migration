@@ -101,11 +101,9 @@ export const interpolate = <T extends LerpValue>(
 
 
 export const getHeading = ([x1, y1]: number[], [x2, y2]: number[]) => {
-    const dx = x2 - x1;
-    const dy = y2 - y1;
-    const atan2 = Math.atan2(dy, dx);
-    return 180 - radToDeg(atan2);
-}
+    const angle = Math.PI/2 - Math.atan2(y2 - y1, x2 - x1);
+    return radToDeg(angle);
+};
 
 const radToDeg = (angle: number) => {
     return 180 * angle / Math.PI;
