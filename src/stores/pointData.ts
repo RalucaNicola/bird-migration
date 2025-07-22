@@ -5,9 +5,14 @@ import Papa from 'papaparse';
 export interface BirdData {
     birdId: string,
     birdName: string,
+    birdColor?: string,
     coordinates: number[][],
     timeDates: Date[]
 }
+
+// Esri color ramps - Beaded Pastel
+// #e65154ff,#67e6d1ff,#ff8cd9ff,#d99d5bff,#c8f2a9ff,#d4b8ffff
+const colors = ["#e65154", "#67e6d1", "#ff8cd9", "#d99d5b", "#c8f2a9", "#d4b8ff"];
 
 class PointData {
     dataLoaded: boolean = false;
@@ -21,7 +26,7 @@ class PointData {
     }
 
     initialize() {
-        Papa.parse('./data-processing/filtered_file.csv', {
+        Papa.parse('./filtered_file.csv', {
             download: true, complete: (results) => {
                 const dataWithoutHeader = results.data.slice(1) as string[];
                 dataWithoutHeader.forEach(d => {
@@ -43,10 +48,14 @@ class PointData {
                             bird.timeDates.push(new Date(d[1]))
                         }
                     }
-
+                    
                 });
                 // Remove tracks with less than 5 coordinates;
-                this.data = this.data.filter(d => d.coordinates.length >= 5);
+
+                this.data = this.data.filter(d => d.coordinates.length >= 5000);
+                this.data.forEach((d, i) => {
+                    d.birdColor = colors[i]
+                });
                 const minDates = this.data.map(d => d.timeDates[0].getTime())
                 const maxDates = this.data.map(d => d.timeDates[d.timeDates.length - 1].getTime());
                 this.timeExtent = [

@@ -103,12 +103,12 @@ export const Timeline = observer(() => {
                 <div className={styles.date}>{formatDate(currentTime.getTime())}</div>
                 <div className={styles.hours}>{formatTime(currentTime)}</div>
             </div>
-            <div className={styles.followMode}><calcite-label layout="inline">Follow bird
+            {/* <div className={styles.followMode}><calcite-label layout="inline">Follow bird
                 <calcite-switch oncalciteSwitchChange={(evt) => {
                     const value = evt.target.checked;
                     isFollowingRef.current = value;
                 }}></calcite-switch>
-                </calcite-label></div>
+                </calcite-label></div> */}
         </div>}
         <div className={styles.container} ref={timelineRef}></div>
     </div>);
