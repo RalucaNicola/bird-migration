@@ -48,6 +48,10 @@ export const initializeView = async (divRef: HTMLDivElement) => {
                 ground: "world-elevation"
             }),
             qualityProfile: "high",
+            //@ts-ignore
+            qualitySettings: {
+                bloom: true
+            },
             popup: {
                 dockEnabled: true,
                 dockOptions: {

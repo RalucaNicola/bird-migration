@@ -18,10 +18,17 @@ type MapAnimationParams = {
 
 const lineSymbol = new LineSymbol3D({
     symbolLayers: [new LineSymbol3DLayer({
-        material: { color: [0, 255, 255, 1] },
+        material: {
+            color: [0, 255, 255, 1], 
+            //@ts-ignore
+            emissive: {
+                strength: 3,
+                source: "color"
+            }
+        },
         cap: "round",
         join: "round",
-        size: 2
+        size: 1
     })]
 });
 
@@ -42,7 +49,8 @@ class MapAnimation {
     initializeLineGraphics() {
         const animatedLineLayer = new GraphicsLayer({
             elevationInfo: {
-                mode: "on-the-ground",
+                mode: "absolute-height",
+                offset: 1000
             }
         });
         this.lineGraphics = this.data.map(d => new Graphic({
@@ -73,6 +81,12 @@ class MapAnimation {
         while (i < timeDates.length - 1 && time > timeDates[i + 1]) {
             i++;
         }
+
+        const prev24 = new Date(time.getTime() - 24 * 60 * 60 * 1000);
+        let j = 0;
+        while (j < timeDates.length - 1 && prev24 > timeDates[j + 1]) {
+            j++;
+        }
         if (i < timeDates.length - 1) {
             const p1 = coordinates[i];
             const p2 = coordinates[i + 1];
@@ -84,7 +98,7 @@ class MapAnimation {
                 timeDates[i + 1].getTime() - timeDates[i].getTime()
             );
             const paths = [
-                coordinates.slice(0, i + 1).concat([point])
+                coordinates.slice(j, i + 1).concat([point])
             ];
             const line = lineGraphic.geometry.clone() as Polyline;
             line.paths = paths;
