@@ -15,10 +15,10 @@ import '@esri/calcite-components/dist/components/calcite-fab';
 import '@esri/calcite-components/dist/components/calcite-label';
 import '@esri/calcite-components/dist/components/calcite-switch';
 
-const timeStep = 100; // milliseconds
+const timeStep = 60 * 60 * 1000; // 1 hour
 
 export const Timeline = observer(() => {
-    const { dataLoaded, timeDates, coordinates } = pointData;
+    const { dataLoaded, data, timeExtent } = pointData;
     const { viewLoaded } = state;
     const [currentTime, setCurrentTime] = useState<Date>();
     const timelineRef = useRef<HTMLDivElement>(null);
@@ -37,7 +37,7 @@ export const Timeline = observer(() => {
             requestAnimationFrame(() => {
                 let currentTime = new Date(timesliderRef.current.timeExtent.end.getTime() + timeStep);
                 if (currentTime >= timesliderRef.current.fullTimeExtent.end) {
-                    currentTime = timeDates[0];
+                    currentTime = timeExtent[0];
                 }
                 updateVisualization(currentTime);
             })
@@ -57,8 +57,8 @@ export const Timeline = observer(() => {
             let watchHandler: IHandle = null;
             timesliderRef.current = new TimeSlider({
                 fullTimeExtent: {
-                    start: timeDates[0],
-                    end: timeDates[timeDates.length - 1]
+                    start: timeExtent[0],
+                    end: timeExtent[1]
                 },
                 timeVisible: false,
                 stops: {
@@ -70,7 +70,7 @@ export const Timeline = observer(() => {
                 mode: "cumulative-from-start",
                 container: timelineRef.current
             });
-            mapAnimationRef.current = new MapAnimation({ coordinates, timeDates, view });
+            mapAnimationRef.current = new MapAnimation({ data, view });
 
             watchHandler = reactiveUtils.watch(() => timesliderRef.current.timeExtent, (timeExtent) => {
                 setIsAnimating(false);
@@ -89,7 +89,7 @@ export const Timeline = observer(() => {
         if (isAnimating) {
             let currentTime = new Date(timesliderRef.current.timeExtent.end.getTime() + timeStep);
             if (currentTime >= timesliderRef.current.fullTimeExtent.end) {
-                currentTime = timeDates[0];
+                currentTime = timeExtent[0];
             }
             updateVisualization(currentTime);
         }
