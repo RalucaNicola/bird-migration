@@ -45,6 +45,7 @@ export const formatDate = (time: number) => {
 
 export const formatTime = (date: Date) => {
     return new Intl.DateTimeFormat("en-US", {
+        second: "numeric",
         hour: "numeric",
         minute: "numeric",
         hour12: true,
