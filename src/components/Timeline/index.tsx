@@ -28,11 +28,15 @@ export const Timeline = observer(() => {
     const isFollowingRef = useRef<boolean>(false);
     const mapAnimationRef = useRef(null);
     const viewRef = useRef<__esri.SceneView>(null);
+    const frameCountRef = useRef(0);
 
     const updateVisualization = (time: Date) => {
-        mapAnimationRef.current.update(time, isFollowingRef.current);
-        (viewRef.current.environment.lighting as SunLighting).date = time;
-        setCurrentTime(time);
+        if (frameCountRef.current % 2 === 0) {
+            mapAnimationRef.current.update(time, isFollowingRef.current);
+            (viewRef.current.environment.lighting as SunLighting).date = time;
+            setCurrentTime(time);
+        }
+        frameCountRef.current++;
         if (isAnimatingRef.current) {
             requestAnimationFrame(() => {
                 let currentTime = new Date(timesliderRef.current.timeExtent.end.getTime() + timeStep);
