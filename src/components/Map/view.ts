@@ -44,8 +44,7 @@ export const initializeView = async (divRef: HTMLDivElement) => {
         view = new SceneView({
             container: divRef,
             map: new Map({
-                basemap: "satellite",
-                ground: "world-elevation"
+                basemap: "satellite"
             }),
             qualityProfile: "high",
             //@ts-ignore
