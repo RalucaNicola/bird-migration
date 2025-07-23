@@ -90,53 +90,58 @@ class MapAnimation {
         while (i < this.timeDates.length - 1 && time > this.timeDates[i + 1]) {
             i++;
         }
+        
         const p1 = this.coordinates[i];
         const p2 = this.coordinates[i + 1];
-
-        const point = interpolate(
+        const p = interpolate(
             p1,
             p2,
             time.getTime() - this.timeDates[i].getTime(),
             this.timesBetweenVertices[i]
         );
 
+        const point = [parseFloat(p[0].toFixed(3)), parseFloat(p[1].toFixed(3)), parseFloat(p[2].toFixed(3))];
         const [x, y, z] = point;
         const meshOrigin = new Point({ x, y, z, spatialReference: SpatialReference.WebMercator });
         const heading = getHeading(p1, point);
         this.updateLine(point, i);
         this.updateBirdGraphic(meshOrigin, heading);
         if (isFollowing) {
-            this.updateCamera();
+            this.updateCamera(heading);
         }
        
     }
 
-    async updateCamera() {
+    async updateCamera(heading: number) {
         if (this.birdGraphic) {
             const birdMesh = this.birdGraphic.geometry as Mesh;
-            const mesh = new Mesh({
-                spatialReference: birdMesh.spatialReference,
-                vertexSpace: birdMesh.vertexSpace,
-                vertexAttributes: {
-                    position: [0, -50, 20]
-                } as any
-            });
-            mesh.centerAt(birdMesh.origin);
-            mesh.rotate(0, 0, birdMesh.transform.rotationAngle);
+            // const mesh = new Mesh({
+            //     spatialReference: birdMesh.spatialReference,
+            //     vertexSpace: birdMesh.vertexSpace,
+            //     vertexAttributes: {
+            //         position: [0, -30, 10]
+            //     } as any
+            // });
+            // mesh.centerAt(birdMesh.origin);
+            // mesh.rotate(0, 0, birdMesh.transform.rotationAngle);
 
-            const cameraMesh = await meshUtils.convertVertexSpace(
-                mesh,
-                new MeshGeoreferencedVertexSpace()
-            );
+            // const cameraMesh = await meshUtils.convertVertexSpace(
+            //     mesh,
+            //     new MeshGeoreferencedVertexSpace()
+            // );
+
+            const x = birdMesh.origin.x - 15 * Math.sin(heading * Math.PI / 180);
+            const y = birdMesh.origin.y - 15 * Math.cos(heading * Math.PI / 180);
+            const z = birdMesh.origin.z + 10;
 
             this.view.camera = new Camera({
                 position: new Point({
-                    spatialReference: cameraMesh.spatialReference,
-                    x: cameraMesh.vertexAttributes.position[0],
-                    y: cameraMesh.vertexAttributes.position[1],
-                    z: cameraMesh.vertexAttributes.position[2],
+                    spatialReference: birdMesh.spatialReference,
+                    x,
+                    y,
+                    z,
                 }),
-                heading: -birdMesh.transform.rotationAngle,
+                heading,
                 tilt: 60,
                 fov: 105,
             });
@@ -157,6 +162,7 @@ class MapAnimation {
         if (this.birdGraphic) {
             const birdMesh = this.birdGraphic.geometry as Mesh;
             birdMesh.centerAt(origin);
+            console.log(origin.x, origin.y, origin.z);
             birdMesh.transform = this.initialTransform?.clone();
             birdMesh.rotate(0, 0, -heading);
         }
