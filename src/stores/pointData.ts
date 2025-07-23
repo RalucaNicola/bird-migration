@@ -22,7 +22,7 @@ class PointData {
                 dataWithoutHeader.forEach(d => {
                     if (parseFloat(d[3]) && parseFloat(d[4])) {
                         const [x, y] = lngLatToXY(parseFloat(d[3]), parseFloat(d[4]));
-                        coords.push([x, y, parseFloat(d[23]) || 0]);
+                        coords.push([parseFloat(x.toFixed(3)), parseFloat(y.toFixed(3)), parseInt(d[23]) || 0]);
                         timeDates.push(new Date(d[2]))
                     }
                 });
