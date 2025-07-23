@@ -27,7 +27,7 @@
   color: rgba(255 255 255 / 80%);
 }
 
-:global(.esri-time-slider__animation), 
+:global(.esri-time-slider__play), 
 :global(.esri-time-slider__time-extent) {
   display: none !important;
 }
